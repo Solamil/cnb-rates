@@ -14,6 +14,7 @@ import (
 var ratesDir string = "./rates"
 var pathList string = ratesDir+"/list.txt"
 var pathDate string = ratesDir+"/date.txt"
+var pathNumber string = ratesDir+"/number.txt"
 var pathDenniKurz string = "./denni_kurz.txt"
 var coinCode string = "czk"
 
@@ -37,6 +38,7 @@ func main() {
 	http.HandleFunc("/list", list_handler)
 	http.HandleFunc("/date", date_handler)
 	http.HandleFunc("/json", json_handler)
+	http.HandleFunc("/number", number_handler)
 	http.HandleFunc("/denni_kurz.txt", dailyrates_handler)
 	http.HandleFunc("/", index_handler)
 
@@ -104,6 +106,11 @@ func date_handler(w http.ResponseWriter, r *http.Request) {
 
 func dailyrates_handler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, pathDenniKurz)
+}
+
+func number_handler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, pathNumber)
+
 }
 
 func json_handler(w http.ResponseWriter, r *http.Request) {
