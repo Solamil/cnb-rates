@@ -47,17 +47,6 @@ render_html() {
 	<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
 	</head>
 	<body>
-		<form action=\"/\" method=\"GET\">
-			<input type=\"submit\" id=\"save_btn\" style=\"position: absolute;
-		     left: -9999px; width: 1px; height: 1px;\" tabindex=\"-1\" />
-			<span>$domain/?code=</span>
-			<input type=\"text\" name=\"code\" value=\"\" list=\"currencies\" autocomplete=\"off\">
-			<span>&amount=</span>
-			<input type=\"text\" name=\"amount\" value=\"1\" list=\"currencies\" autocomplete=\"off\">
-			<datalist id=\"currencies\">
-	$option_tags
-			</datalist>
-		</form>	
 		<pre>
 $(cat $file)		
 		</pre>
@@ -70,6 +59,14 @@ $(cat $file)
 			<a href=\"/number\">number</a>
 			<a href=\"/denni_kurz.txt\">denni_kurz.txt</a>
 			<p>$links_code</p>
+			<form action=\"/\" method=\"GET\">
+				<input type=\"text\" name=\"code\" placeholder=\"kód\" value=\"\" list=\"currencies\" autocomplete=\"off\">
+				<input type=\"text\" name=\"amount\" placeholder=\"množství\" list=\"currencies\" autocomplete=\"off\">
+				<input type=\"submit\" id=\"save_btn\" value="OK" />
+				<datalist id=\"currencies\">
+		$option_tags
+				</datalist>
+			</form>	
 			<p> <a href=\"$git_url\">Projekt</a></p>
 		</footer>
 	</body>
