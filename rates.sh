@@ -7,6 +7,7 @@ url="cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho
 dir="rates"
 list_file="$dir/list.txt"
 date_file="$dir/date.txt"
+number_file="$dir/number.txt"
 index="web/index.html"
 
 [ -d $dir ] || mkdir -pv $dir
@@ -17,6 +18,7 @@ parse_rates() {
 
 	grep "|" $file | cut -d"|" -f4 > $list_file
 	head -n 1 $file | cut -d" " -f1 > $date_file
+	head -n 1 $file | cut -d"#" -f2 > $number_file
 	codes=$(grep -v "^kód" $list_file)
 	option_tags=""
 	links_code=""
@@ -65,6 +67,7 @@ $(cat $file)
 			<a href=\"/json\">JSON</a>
 			<a href=\"/list\">list</a>
 			<a href=\"/date\">date</a>
+			<a href=\"/number\">number</a>
 			<a href=\"/denni_kurz.txt\">denni_kurz.txt</a>
 			<p>$links_code</p>
 			<p> <a href=\"$git_url\">Projekt</a></p>
