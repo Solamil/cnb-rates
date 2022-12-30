@@ -23,6 +23,7 @@ type userBaseResponse struct {
 	Volume []string `json:"volume"`
 	Value []string `json:"value"`
 	CoinCode string `json:"coin_code"`
+	Number int `json:"number"`
 	Date string `json:"date"`
 }
 
@@ -81,11 +82,13 @@ func index_handler(w http.ResponseWriter, r *http.Request) {
 			amountBase, _ := strconv.ParseFloat(info[1], 64)
 			if param.Amount != nil && len(param.Amount[0]) > 0 {
 				amount, _ = strconv.ParseFloat(param.Amount[0], 64)
+				value = value * (amount/amountBase)
+				answer = fmt.Sprintf("%.3f", value)
 			} else {
 				amount = amountBase
+				value = value * (amount/amountBase)
+				answer = fmt.Sprintf("%.3f\n%.f", value, amount)
 			}
-			value = value * (amount/amountBase)
-			answer = fmt.Sprintf("%.3f\n%.f", value, amount)
 		}
 		w.Write([]byte(answer))
 		return
@@ -120,17 +123,18 @@ func json_handler(w http.ResponseWriter, r *http.Request) {
 	if len(q) != 0 {
 
 	}
-	for i, value := range getList() {
-		if i == 0 {
-			continue
-		}
-		infos := getRate(value)
-		baseResp.Code = append(baseResp.Code, value)
+	list := readFile(pathList) 
+	for i := 1; i < len(list); i++ {
+		infos := getRate(list[i])
+		baseResp.Code = append(baseResp.Code, list[i])
 		baseResp.Value = append(baseResp.Value, infos[0])
 		baseResp.Volume = append(baseResp.Volume, infos[1])
-	}	
+	}
+
 	baseResp.CoinCode = coinCode 
-	baseResp.Date = getDate()
+
+	baseResp.Date = readFile(pathDate)[0]
+	baseResp.Number, _ = strconv.Atoi(readFile(pathNumber)[0])
 
 	raw, err := json.Marshal(&baseResp)
 	if err != nil {
@@ -140,7 +144,7 @@ func json_handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func isExistCode(code string) bool {
-	for _, value := range getList() {
+	for _, value := range readFile(pathList) {
 		if code == value {
 			return true
 		}
@@ -148,29 +152,16 @@ func isExistCode(code string) bool {
 	return false
 }
 
-func getList() []string {
-	var list []string
-		
-	file, err := os.Open(pathList)
-	if err != nil {
-		e := fmt.Sprintf("Failed to open %s", pathList)
-		return []string{e}
-	}
-
-	scanner := bufio.NewScanner(file)
-	scanner.Split(bufio.ScanLines)
-
-	for scanner.Scan() {
-		list = append(list, scanner.Text())
-	}
-	file.Close()
-	return list 
-}
-
 func getRate(currency string) []string {
 	curr := strings.ToUpper(currency)
 	pathFile := fmt.Sprintf("%s/%s.txt", ratesDir, curr)
-	
+
+	output := readFile(pathFile) // 0 - value, 1 - volume
+	return output
+}
+
+func readFile(pathFile string) []string {
+	var output []string
 	file, err := os.Open(pathFile)
 	if err != nil {
 		e := fmt.Sprintf("Failed to open %s", pathFile)
@@ -179,34 +170,12 @@ func getRate(currency string) []string {
 
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
-	var text []string   // 0 - value, 1 - volume
 
 	for scanner.Scan() {
-		text = append(text, scanner.Text())
+		output = append(output, scanner.Text())
 	}
 	file.Close()
-	
-	return text
-}
-
-func getDate() string {
-
-	file, err := os.Open(pathDate)
-	if err != nil {
-		e := fmt.Sprintf("Failed to open %s", pathDate)
-		return e 
-	}
-
-	scanner := bufio.NewScanner(file)
-	scanner.Split(bufio.ScanLines)
-	var text string
-
-	scanner.Scan()
-	text = scanner.Text()
-	file.Close()
-	
-	return text
-
+	return output
 }
 
 func runShellScript(name string) {
