@@ -119,10 +119,10 @@ func number_handler(w http.ResponseWriter, r *http.Request) {
 func json_handler(w http.ResponseWriter, r *http.Request) {
 	var baseResp = userBaseResponse{}
 
-	q, _ := url.PathUnescape(r.URL.RawQuery)
-	if len(q) != 0 {
-
-	}
+//	q, _ := url.PathUnescape(r.URL.RawQuery)
+//	if len(q) != 0 {
+//
+//	}
 	list := readFile(pathList) 
 	for i := 1; i < len(list); i++ {
 		infos := getRate(list[i])
