@@ -25,8 +25,6 @@ parse_rates() {
 		option_tags=$option_tags" <option value=\"$i\"></option>"
 		links_code=$links_code" <a href=\"/?code=$i\">$i</a>"
 	done
-	option_tags=$option_tags" <option value=\"list\"></option>"
-	option_tags=$option_tags" <option value=\"date\"></option>"
 
 	grep -v "kód" < $list_file | while IFS= read -r code 
 	do
