@@ -1,6 +1,5 @@
 #!/bin/sh
 title="Kurz devizového trhu"
-domain="czk.michalkukla.xyz"
 git_url="https://github.com/Solamil/cnb-rates"
 file="denni_kurz.txt"
 url="cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/"$file
@@ -62,7 +61,7 @@ $(cat $file)
 			<form action=\"/\" method=\"GET\">
 				<input type=\"text\" name=\"code\" placeholder=\"kód\" value=\"\" list=\"currencies\" autocomplete=\"off\">
 				<input type=\"text\" name=\"amount\" placeholder=\"množství\" list=\"currencies\" autocomplete=\"off\">
-				<input type=\"submit\" id=\"save_btn\" value="OK" />
+				<input type=\"submit\" id=\"save_btn\" value=\"OK\" />
 				<datalist id=\"currencies\">
 		$option_tags
 				</datalist>
