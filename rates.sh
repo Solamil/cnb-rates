@@ -19,18 +19,20 @@ parse_rates() {
 	head -n 1 $file | cut -d" " -f1 > $date_file
 	head -n 1 $file | cut -d"#" -f2 > $number_file
 	codes=$(grep -v "^kód" $list_file)
-	option_tags=""
-	links_code=""
-	for i in $codes; do
-		option_tags=$option_tags" <option value=\"$i\"></option>"
-		links_code=$links_code" <a href=\"/?code=$i\">$i</a>"
-	done
 
 	grep -v "kód" < $list_file | while IFS= read -r code 
 	do
 		line=$(grep "$code" $file)
 		echo "$line" | grep -o "\|[^\|]*$" | tr "," "." > "$dir/$code.txt"
 		echo "$line" | cut -d"|" -f3 >> "$dir/$code.txt"
+	done
+
+	option_tags=""
+	links_code=""
+	for i in $codes; do
+		value=$(head -n 1 "${dir}/${i}.txt")
+		option_tags=$option_tags" <option value=\"$i\"></option>"
+		links_code=$links_code" <a href=\"/?code=$i\"><abbr title=\"$value\">$i</abbr></a>"
 	done
 }
 
@@ -52,8 +54,8 @@ $(cat $file)
 			<p>Webová aplikace pro zobrazení kurzu devizového trhu v dalších formátech. Původ dat <a href=\"https://$url\">ČNB</a>.</p>
 			<a href=\"/json\">JSON</a>
 			<a href=\"/list\">list</a>
-			<a href=\"/date\">date</a>
-			<a href=\"/number\">number</a>
+			<a href=\"/date\"><abbr title=\"$(cat $date_file 2>/dev/null)\">date</abbr></a>
+			<a href=\"/number\"><abbr title=\"$(cat $number_file 2>/dev/null)\">number</abbr></a>
 			<a href=\"/denni_kurz.txt\">denni_kurz.txt</a>
 			<p>$links_code</p>
 			<form action=\"/\" method=\"GET\">
