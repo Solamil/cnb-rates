@@ -30,7 +30,7 @@ parse_rates() {
 	option_tags=""
 	links_code=""
 	for i in $codes; do
-		value=$(head -n 1 "${dir}/${i}.txt")
+		value=$(cat "${dir}/${i}.txt")
 		option_tags=$option_tags" <option value=\"$i\"></option>"
 		links_code=$links_code" <a href=\"/?code=$i\"><abbr title=\"$value\">$i</abbr></a>"
 	done
@@ -46,11 +46,14 @@ render_html() {
 	<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
 	</head>
 	<body>
+		<a href=\"/?code=EUR\"><abbr title=\"$(head -n 1 "$dir/EUR.txt")\">EUR</abbr></a>
+		<a href=\"/?code=USD\"><abbr title=\"$(head -n 1 "$dir/USD.txt")\">USD</abbr></a>
+		<a href=\"/?code=GBP\"><abbr title=\"$(head -n 1 "$dir/GBP.txt")\">GBP</abbr></a>
 		<pre>
 $(cat $file)		
 		</pre>
 		<footer style=\"font-size: x-small\">
-			<p>Kurz devizového trhu</p>
+			<p>Kurz devizového trhu pro obyčejné lidi.</p>
 			<p>Webová aplikace pro zobrazení kurzu devizového trhu v dalších formátech. Původ dat <a href=\"https://$url\">ČNB</a>.</p>
 			<a href=\"/json\">JSON</a>
 			<a href=\"/list\">list</a>
