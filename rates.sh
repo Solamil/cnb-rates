@@ -34,6 +34,8 @@ parse_rates() {
 		option_tags=$option_tags" <option value=\"$i\"></option>"
 		links_code=$links_code" <a href=\"/?code=$i\"><abbr title=\"$value\">$i</abbr></a>"
 	done
+	printf "1€ %.2fKč 1$ %.2fKč 1£ %.2fKč" "$(head -n 1 "$dir/EUR.txt")" "$(head -n 1 "$dir/USD.txt")" "$(head -n 1 "$dir/GBP.txt")" > "$dir/svata_trojice.txt"
+
 }
 
 render_html() { 
@@ -46,9 +48,8 @@ render_html() {
 	<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
 	</head>
 	<body>
-		<a href=\"/?code=EUR\"><abbr title=\"$(head -n 1 "$dir/EUR.txt")\">EUR</abbr></a>
-		<a href=\"/?code=USD\"><abbr title=\"$(head -n 1 "$dir/USD.txt")\">USD</abbr></a>
-		<a href=\"/?code=GBP\"><abbr title=\"$(head -n 1 "$dir/GBP.txt")\">GBP</abbr></a>
+	
+		<p>$(cat "$dir/svata_trojice.txt")</p>
 		<pre>
 $(cat $file)		
 		</pre>
@@ -60,6 +61,7 @@ $(cat $file)
 			<a href=\"/date\"><abbr title=\"$(cat $date_file 2>/dev/null)\">date</abbr></a>
 			<a href=\"/number\"><abbr title=\"$(cat $number_file 2>/dev/null)\">number</abbr></a>
 			<a href=\"/denni_kurz.txt\">denni_kurz.txt</a>
+			<a href=\"/svata_trojice.txt\">Svatá trojice</a>
 			<p>$links_code</p>
 			<form action=\"/\" method=\"GET\">
 				<input type=\"text\" name=\"code\" placeholder=\"kód\" value=\"\" list=\"currencies\" autocomplete=\"off\">
@@ -79,9 +81,7 @@ $(cat $file)
 
 if [ -f $file ]; then
 	current_date=$(date +"%d.%m.%Y")
-	weekday=$(date +"%a")
-	if [ "$weekday" != "Sun" ] && [ "$weekday" != "Sat" ] && \
-		[ "$(cat $date_file)" != "$current_date" ]; then
+	if [ "$(cat $date_file)" != "$current_date" ]; then
 			download_rates
 	fi
 else

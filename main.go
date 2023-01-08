@@ -16,6 +16,7 @@ var pathList string = ratesDir+"/list.txt"
 var pathDate string = ratesDir+"/date.txt"
 var pathNumber string = ratesDir+"/number.txt"
 var pathDenniKurz string = "./denni_kurz.txt"
+var pathHolytrinity string = ratesDir+"/svata_trojice.txt"
 var coinCode string = "czk"
 
 type userBaseResponse struct {
@@ -40,6 +41,7 @@ func main() {
 	http.HandleFunc("/date", date_handler)
 	http.HandleFunc("/json", json_handler)
 	http.HandleFunc("/number", number_handler)
+	http.HandleFunc("/svata_trojice.txt", holytrinity_handler)
 	http.HandleFunc("/denni_kurz.txt", dailyrates_handler)
 	http.HandleFunc("/", index_handler)
 
@@ -80,14 +82,13 @@ func index_handler(w http.ResponseWriter, r *http.Request) {
 			info := getRate(param.Code[0])
 			value, _ := strconv.ParseFloat(info[0], 64)
 			amountBase, _ := strconv.ParseFloat(info[1], 64)
+			var amount float64 = 0.0
 			if param.Amount != nil && len(param.Amount[0]) > 0 {
 				amount, _ = strconv.ParseFloat(param.Amount[0], 64)
 				value = value * (amount/amountBase)
 				answer = fmt.Sprintf("%.3f", value)
 			} else {
-				amount = amountBase
-				value = value * (amount/amountBase)
-				answer = fmt.Sprintf("%.3f\n%.f", value, amount)
+				answer = fmt.Sprintf("%.3f\n%.f", value, amountBase)
 			}
 		}
 		w.Write([]byte(answer))
@@ -114,6 +115,10 @@ func dailyrates_handler(w http.ResponseWriter, r *http.Request) {
 func number_handler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, pathNumber)
 
+}
+
+func holytrinity_handler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, pathHolytrinity)
 }
 
 func json_handler(w http.ResponseWriter, r *http.Request) {
