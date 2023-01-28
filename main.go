@@ -42,6 +42,8 @@ func main() {
 	http.HandleFunc("/json", json_handler)
 	http.HandleFunc("/number", number_handler)
 	http.HandleFunc("/svata_trojice.txt", holytrinity_handler)
+	http.HandleFunc("/svata_trojice", holytrinity_handler)
+	http.HandleFunc("/holy_trinity", holytrinity_handler)
 	http.HandleFunc("/denni_kurz.txt", dailyrates_handler)
 	http.HandleFunc("/", index_handler)
 
@@ -53,7 +55,6 @@ func index_handler(w http.ResponseWriter, r *http.Request) {
 	q, _ := url.PathUnescape(r.URL.RawQuery)
 	if len(q) != 0 {
 		var code string = ""
-		var amount float64 = 1.0
 		var answer string = ""
 		m, err := url.ParseQuery(q)
 		if err != nil {
@@ -118,7 +119,18 @@ func number_handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func holytrinity_handler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, pathHolytrinity)
+	var result string = ""
+	output := readFile(pathHolytrinity)
+	q, _ := url.PathUnescape(r.URL.RawQuery)
+	switch q {
+		case "p": // p as pretty
+			result = fmt.Sprintf("💵%s",output[0])
+		default:
+			http.ServeFile(w, r, pathHolytrinity)
+			return
+	}
+	fmt.Println(q)
+	w.Write([]byte(result))
 }
 
 func json_handler(w http.ResponseWriter, r *http.Request) {
