@@ -2,11 +2,12 @@
 title="Kurz devizového trhu"
 git_url="https://github.com/Solamil/cnb-rates"
 file="denni_kurz.txt"
-url="cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/"$file
+url="https://cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/"$file
 dir="rates"
 list_file="$dir/list.txt"
 date_file="$dir/date.txt"
 number_file="$dir/number.txt"
+trinity_file="$dir/svata_trojice.txt"
 index="web/index.html"
 
 [ -d $dir ] || mkdir -pv $dir
@@ -34,7 +35,7 @@ parse_rates() {
 		option_tags=$option_tags" <option value=\"$i\"></option>"
 		links_code=$links_code" <a href=\"/?code=$i\"><abbr title=\"$value\">$i</abbr></a>"
 	done
-	printf "1€ %.2fKč 1$ %.2fKč 1£ %.2fKč" "$(head -n 1 "$dir/EUR.txt")" "$(head -n 1 "$dir/USD.txt")" "$(head -n 1 "$dir/GBP.txt")" > "$dir/svata_trojice.txt"
+	printf "1€ %.2fKč 1$ %.2fKč 1£ %.2fKč" "$(head -n 1 "$dir/EUR.txt")" "$(head -n 1 "$dir/USD.txt")" "$(head -n 1 "$dir/GBP.txt")" > "$trinity_file"
 
 }
 
@@ -55,13 +56,14 @@ $(cat $file)
 		</pre>
 		<footer style=\"font-size: x-small\">
 			<p>Kurz devizového trhu pro obyčejné lidi.</p>
-			<p>Webová aplikace pro zobrazení kurzu devizového trhu v dalších formátech. Původ dat <a href=\"https://$url\">ČNB</a>.</p>
+			<p>Webová aplikace pro zobrazení kurzu devizového trhu v dalších formátech. Původ dat <a href=\"$url\">ČNB</a>.</p>
 			<a href=\"/json\">JSON</a>
 			<a href=\"/list\">list</a>
 			<a href=\"/date\"><abbr title=\"$(cat $date_file 2>/dev/null)\">date</abbr></a>
 			<a href=\"/number\"><abbr title=\"$(cat $number_file 2>/dev/null)\">number</abbr></a>
 			<a href=\"/denni_kurz.txt\">denni_kurz.txt</a>
-			<a href=\"/svata_trojice.txt\">Svatá trojice</a>
+			<a href=\"/svata_trojice\">Svatá trojice</a>
+			<a href=\"/holy_trinity\">Holy Trinity</a>
 			<p>$links_code</p>
 			<form action=\"/\" method=\"GET\">
 				<input type=\"text\" name=\"code\" placeholder=\"kód\" value=\"\" list=\"currencies\" autocomplete=\"off\">
