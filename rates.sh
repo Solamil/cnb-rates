@@ -37,7 +37,7 @@ parse_rates() {
 		option_tags=$option_tags" <option value=\"$i\"></option>"
 		links_code=$links_code" <a href=\"/?code=$i\"><abbr title=\"$value\">$i</abbr></a>"
 	done
-	printf "1€ %.2fKč 1$ %.2fKč 1£ %.2fKč" "$(head -n 1 "$dir/EUR.txt")" "$(head -n 1 "$dir/USD.txt")" "$(head -n 1 "$dir/GBP.txt")" > "$trinity_file"
+	printf "1$ %.2fKč 1€ %.2fKč 1£ %.2fKč" "$(head -n 1 "$dir/USD.txt")" "$(head -n 1 "$dir/EUR.txt")" "$(head -n 1 "$dir/GBP.txt")" > "$trinity_file"
 
 }
 
@@ -66,6 +66,7 @@ $(cat $file)
 			<a href=\"/denni_kurz.txt\">denni_kurz.txt</a>
 			<a href=\"/svata_trojice\">Svatá trojice</a>
 			<a href=\"/holy_trinity\">Holy Trinity</a>
+			<a href=\"/holy_trinity?p\">Pretty</a>
 			<p>$links_code</p>
 			<form action=\"/\" method=\"GET\">
 				<input type=\"text\" name=\"code\" placeholder=\"kód\" value=\"\" list=\"currencies\" autocomplete=\"off\">
