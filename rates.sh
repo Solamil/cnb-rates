@@ -8,8 +8,10 @@ list_file="$dir/list.txt"
 date_file="$dir/date.txt"
 number_file="$dir/number.txt"
 trinity_file="$dir/svata_trojice.txt"
-index="web/index.html"
+web_dir="web"
+index="$web_dir/index.html"
 
+[ -d $web_dir ] || mkdir -pv $web_dir
 [ -d $dir ] || mkdir -pv $dir
 
 download_rates() { curl -sLf "$url" -o $file; }
