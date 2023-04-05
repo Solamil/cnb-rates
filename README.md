@@ -6,7 +6,7 @@
 ## Installation
 
 ```
-git clone  https://github.com/Solamil/cnb-rates
+git clone https://github.com/Solamil/cnb-rates
 cd cnb-rates/
 go run main.go
 crontab -e
@@ -19,4 +19,4 @@ Add to crontab following
 
 ## Author
 
-Michal < michal@michalkukla.xyz >
+Solamil (https://github.com/Solamil/cnb-rates)
